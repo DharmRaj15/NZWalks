@@ -54,7 +54,7 @@ namespace NZWalksAPI.Repositories
             {
                 return null;
             }
-
+            
             dbContext.Regions.Remove(deleteRegion);
             await dbContext.SaveChangesAsync();
 

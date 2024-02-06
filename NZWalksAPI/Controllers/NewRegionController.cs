@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using NZWalksAPI.Data;
 using NZWalksAPI.Models.Domain;
 using NZWalksAPI.Models.DTO;
@@ -11,10 +12,12 @@ namespace NZWalksAPI.Controllers
     public class NewRegionController : Controller
     {
         private readonly IRegionRepository regionRepository;
+        private readonly IMapper mapper;
 
-        public NewRegionController(IRegionRepository regionRepository)
+        public NewRegionController(IRegionRepository regionRepository,IMapper mapper)
         {
             this.regionRepository = regionRepository;
+            this.mapper = mapper;
         }
 
         [HttpGet]

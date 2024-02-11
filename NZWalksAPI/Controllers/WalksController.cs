@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using NZWalksAPI.CustomActionFilters;
 using NZWalksAPI.Models.Domain;
 using NZWalksAPI.Models.DTO;
 using NZWalksAPI.Repositories;
@@ -23,6 +24,7 @@ namespace NZWalksAPI.Controllers
         }
 
         [HttpPost]
+        [ValidateModel]
         public async Task<IActionResult> Create([FromBody] AddWalksRequestDto addWalksRequestDto)
         {
             //map dto to domain modal
@@ -62,6 +64,7 @@ namespace NZWalksAPI.Controllers
 
         [HttpPut]
         [Route("{id:Guid}")]
+        [ValidateModel]
         public async Task<IActionResult> Update(Guid id,UpdateWalkRequestDto updateWalkRequestDto)
         {
             //map DTO to domain modal

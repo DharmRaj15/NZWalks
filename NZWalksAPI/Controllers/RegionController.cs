@@ -97,28 +97,36 @@ namespace NZWalksAPI.Controllers
         [HttpPost]
         public IActionResult Create([FromBody] AddRegionRequestDto addRegionRequestDto)
         {
-            //Map Dto to domain modal
-            var regionDomainModal = new Region
+            //add validations
+            if (ModelState.IsValid)
             {
-                Code = addRegionRequestDto.Code,
-                Name = addRegionRequestDto.Name,
-                RegionImagerl = addRegionRequestDto.RegionImagerl
-            };
+                //Map Dto to domain modal
+                var regionDomainModal = new Region
+                {
+                    Code = addRegionRequestDto.Code,
+                    Name = addRegionRequestDto.Name,
+                    RegionImagerl = addRegionRequestDto.RegionImagerl
+                };
 
-            //Use domain model to create region
-            dBContext.Regions.Add(regionDomainModal);
-            dBContext.SaveChanges();
+                //Use domain model to create region
+                dBContext.Regions.Add(regionDomainModal);
+                dBContext.SaveChanges();
 
-            //map domain modal back to dto
-            var regionDto = new RegionDto
+                //map domain modal back to dto
+                var regionDto = new RegionDto
+                {
+                    Id = regionDomainModal.Id,
+                    Name = regionDomainModal.Name,
+                    Code = regionDomainModal.Code,
+                    RegionImagerl = regionDomainModal.RegionImagerl
+                };
+                return CreatedAtAction(nameof(GetById), new { Id = regionDto.Id }, regionDto);
+                //return Ok(regionDomainModal);
+            }
+            else
             {
-                Id = regionDomainModal.Id,
-                Name = regionDomainModal.Name,
-                Code = regionDomainModal.Code,
-                RegionImagerl = regionDomainModal.RegionImagerl
-            };
-            return CreatedAtAction(nameof(GetById), new {Id = regionDto.Id},regionDto);
-            //return Ok(regionDomainModal);
+                return BadRequest(ModelState);
+            }
         }
 
         //Put: is used to update the existing region

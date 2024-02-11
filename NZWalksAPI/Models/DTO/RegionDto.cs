@@ -1,4 +1,6 @@
-﻿namespace NZWalksAPI.Models.DTO
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace NZWalksAPI.Models.DTO
 {
     public class RegionDto
     {

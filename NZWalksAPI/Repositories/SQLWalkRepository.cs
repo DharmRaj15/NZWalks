@@ -21,9 +21,50 @@ namespace NZWalksAPI.Repositories
             return walk;
         }
 
-        public async Task<List<Walk>> GetAllWalksAsync()
-        {
-            return await dBContext.Walks.Include("Difficulty").Include("Region").ToListAsync();
+        public async Task<List<Walk>> GetAllWalksAsync(string? filterOn = null, string? filterQuery = null, 
+            string? sortBy = null, bool isAccending = true, int pageNumber = 1, int pageSize = 1000)
+        { 
+            var walks = dBContext.Walks.Include("Difficulty").Include("Region").AsQueryable();
+
+            //pagination it will be after order by
+            //walks = walks.Skip((1 - 1) * 1).Take(10);
+
+            //filterring 
+            if(string.IsNullOrWhiteSpace(filterOn)==false && string.IsNullOrWhiteSpace(filterQuery) == false)
+            {
+                if (filterOn.Equals("Name", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    walks = walks.Where(x => x.Name.Contains(filterQuery));
+                }
+                if (filterOn.Equals("Description", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    walks = walks.Where(x => x.Description.Contains(filterQuery));
+                }
+                if (filterOn.Equals("LengthInKm", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    walks = walks.Where(x => x.LengthInKm == Convert.ToDouble(filterQuery));
+                }
+            }
+
+            //Sorting fucntionality
+            if (string.IsNullOrWhiteSpace(sortBy) == false)
+            {
+                if (sortBy.Equals("Name", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    walks = isAccending ? walks.OrderBy(x => x.Name) : walks.OrderByDescending(x => x.Name);
+                }
+                else if (sortBy.Equals("Length", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    walks = isAccending ? walks.OrderBy(x => x.LengthInKm) : walks.OrderByDescending(x => x.LengthInKm);
+                }
+            }
+
+            //Pagination
+            var skipResult = (pageNumber - 1) * pageSize;
+            return await walks.ToListAsync();
+            //giving error 
+            //return await walks.Skip(skipResult).Take(pageSize).ToListAsync();
+            //return await dBContext.Walks.Include("Difficulty").Include("Region").ToListAsync();
         }
 
         public async Task<Walk?> GetByIdAsync(Guid id)

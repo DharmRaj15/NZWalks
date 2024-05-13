@@ -6,7 +6,7 @@ namespace NZWalksAPI.Data
     public class NZWalksDBContext : DbContext
     {
         //contrustor pass to base class
-        public NZWalksDBContext(DbContextOptions dbContextOptions) : base(dbContextOptions)
+        public NZWalksDBContext(DbContextOptions<NZWalksDBContext> dbContextOptions) : base(dbContextOptions)
         {
 
         }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NZWalksAPI.CustomActionFilters;
 using NZWalksAPI.Models.Domain;
@@ -25,6 +26,7 @@ namespace NZWalksAPI.Controllers
 
         [HttpPost]
         [ValidateModel]
+        
         public async Task<IActionResult> Create([FromBody] AddWalksRequestDto addWalksRequestDto)
         {
             //map dto to domain modal
